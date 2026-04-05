@@ -1,11 +1,9 @@
-# CutOut
-## [Try it online](https://0shuvo0.github.io/CutOut/)
+# CutOut [Try it online](https://0shuvo0.github.io/CutOut/)
 Simple browser-based background remover.
 
 This project removes image backgrounds locally in the browser using BiRefNet via Transformers.js and ONNX Runtime Web. Images are processed on your device and are not uploaded to a server.
 
 ![Demo](demo.png)
-
 ## Features
 
 - Remove backgrounds from images in the browser
