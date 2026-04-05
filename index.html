@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CutOut — AI Background Remover</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<div id="app">
+  <header>
+    <div class="logo">
+      <div class="logo-icon">✂</div>
+      CutOut
+    </div>
+    <div class="badge">100% LOCAL · NO UPLOADS</div>
+  </header>
+
+  <main>
+    <!-- LOADING SCREEN -->
+    <div id="loading-screen">
+      <div>
+        <div class="loading-title">Remove backgrounds<br><span>in your browser</span></div>
+        <p class="loading-sub" style="margin-top:12px">Powered by BiRefNet. Your images never leave your device.</p>
+      </div>
+
+      <div class="progress-container">
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-fill" id="prog-fill"></div>
+        </div>
+        <div class="progress-info">
+          <span id="prog-label">Initializing…</span>
+          <span class="progress-pct" id="prog-pct">0%</span>
+        </div>
+      </div>
+
+      <div class="loading-steps">
+        <div class="step active" id="step-wasm">
+          <div class="step-dot"></div>
+          Loading ONNX Runtime (WebAssembly)
+        </div>
+        <div class="step" id="step-model">
+          <div class="step-dot"></div>
+          Downloading RMBG-1.4 model (~40 MB)
+        </div>
+        <div class="step" id="step-warmup">
+          <div class="step-dot"></div>
+          Warming up inference engine
+        </div>
+      </div>
+
+      <!-- Error state -->
+      <div id="error-box" style="display:none; width:360px; background:rgba(255,107,107,0.08); border:1px solid rgba(255,107,107,0.25); border-radius:12px; padding:20px; text-align:left;">
+        <div style="color:#ff6b6b; font-family:'Syne',sans-serif; font-weight:700; margin-bottom:8px;">⚠ Failed to load model</div>
+        <div id="error-msg" style="color:rgba(255,200,200,0.7); font-size:12px; line-height:1.7; margin-bottom:16px;"></div>
+        <div style="background:rgba(255,255,255,0.04); border-radius:8px; padding:12px; font-size:11px; color:rgba(240,238,255,0.5); line-height:1.8; margin-bottom:16px;">
+          <strong style="color:rgba(240,238,255,0.8);">How to use this app:</strong><br>
+          1. Download the HTML file<br>
+          2. Open it directly in <strong style="color:var(--accent)">Chrome</strong> or <strong style="color:var(--accent)">Edge</strong><br>
+          3. Allow it to download the model (~40 MB)<br>
+          <br>
+          ⚠ Does NOT work inside iframes, sandboxes, or Claude's artifact viewer.
+        </div>
+        <button class="btn btn-primary" onclick="retryLoad()" style="width:100%; justify-content:center;">↺ Retry</button>
+      </div>
+    </div>
+
+    <!-- MAIN APP -->
+    <div id="main-app">
+      <div class="app-header">
+        <div>
+          <div class="app-title">Background <span>Remover</span></div>
+          <div class="app-sub">Drag images or click to upload · Results processed locally</div>
+        </div>
+      </div>
+
+      <!-- DROP ZONE -->
+      <div id="drop-zone" onclick="document.getElementById('file-input').click()">
+        <div class="drop-icon">🖼</div>
+        <div class="drop-title">Drop your images here</div>
+        <div class="drop-sub">or click to browse files</div>
+        <div class="drop-formats">
+          <span class="fmt-tag">PNG</span>
+          <span class="fmt-tag">JPG</span>
+          <span class="fmt-tag">WEBP</span>
+          <span class="fmt-tag">BMP</span>
+        </div>
+        <input type="file" id="file-input" multiple accept="image/*">
+      </div>
+
+      <!-- RESULTS -->
+      <div id="results-section" style="display:none; flex-direction:column; gap:20px;">
+        <div id="results-header">
+          <div class="results-count">
+            <span class="num" id="result-count">0</span> images processed
+          </div>
+          <div class="results-actions">
+            <button class="btn btn-ghost" onclick="clearAll()">✕ Clear all</button>
+            <button class="btn btn-primary" id="download-all-btn" onclick="downloadAll()">
+              ⬇ Download all
+            </button>
+          </div>
+        </div>
+        <div id="results-grid"></div>
+      </div>
+    </div>
+  </main>
+
+  <footer>BiRefNet · ONNX Runtime Web · Transformers.js · All processing is done locally in your browser</footer>
+</div>
+
+<script type="module" src="main.js">  
+
+</script>
+</body>
+</html>
